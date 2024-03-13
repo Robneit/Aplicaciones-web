@@ -1,0 +1,17 @@
+package com.utsem.Service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.utsem.Repository.UsuarioRepository;
+
+
+@Service
+public class NominaService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+  
+}

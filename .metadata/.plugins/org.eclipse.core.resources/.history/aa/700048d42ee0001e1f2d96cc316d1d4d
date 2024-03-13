@@ -1,0 +1,55 @@
+package com.utsem.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.utsem.Repository.UsuarioRepository;
+import com.utsem.model.Empleados;
+import com.utsem.model.Nomina;
+
+@Service
+public class NominaService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    public BigDecimal calcularNomina(Long codigoEmpleado) {
+        Empleados empleado = usuarioRepository.findByn_empleado(codigoEmpleado);
+        if (empleado == null) {
+            // Manejar el caso en que el empleado no exista
+            return BigDecimal.ZERO;
+        }
+
+        // Obtener el salario bruto del empleado
+        BigDecimal salarioBruto = new BigDecimal(empleado.getSalario());
+
+        // Calcular el ISR (Impuesto Sobre la Renta)
+        BigDecimal isr = new BigDecimal(empleado.getISR());
+
+        // Calcular el salario neto restando el ISR del salario bruto
+        BigDecimal salarioNeto = salarioBruto.subtract(salarioBruto.multiply(isr));
+
+        // Verificar si el empleado tiene más de 10 años de antigüedad
+        LocalDateTime fechaIngreso = empleado.getFecha_ingreso();
+        LocalDateTime ahora = LocalDateTime.now();
+        long anosTrabajando = ChronoUnit.YEARS.between(fechaIngreso, ahora);
+        if (anosTrabajando >= 10) {
+            // Calcular el bono adicional del 3%
+            BigDecimal bonoAdicional = salarioBruto.multiply(BigDecimal.valueOf(0.03));
+            // Sumar el bono adicional al salario neto
+            salarioNeto = salarioNeto.add(bonoAdicional);
+        }
+
+        return salarioNeto;
+    }
+
+	public List<Nomina> obtenerNominasPorEmpleado(Long codigoEmpleado) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

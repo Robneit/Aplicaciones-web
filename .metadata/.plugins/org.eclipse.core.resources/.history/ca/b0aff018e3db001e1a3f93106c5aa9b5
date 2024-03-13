@@ -1,0 +1,5 @@
+package com.utsem.nomina.DTO;
+
+public class RolDTO {
+
+}

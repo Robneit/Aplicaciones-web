@@ -1,0 +1,22 @@
+package com.utsem.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.utsem.Repository.QuincenaRepository;
+import com.utsem.model.Quincena;
+
+@Controller
+public class QuincenaController {
+	@Autowired
+	QuincenaRepository quincenaRepository;
+	
+	@PostMapping("guardarQuincena")
+	public String guardarQuincena(@ModelAttribute Quincena quincena) {
+		quincenaRepository.save(quincena);
+		return "correcto";
+	}
+	
+}
